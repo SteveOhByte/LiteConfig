@@ -183,7 +183,7 @@
     "C:\\Users\\miste\\.nuget\\packages\\": {}
   },
   "project": {
-    "version": "1.0.1",
+    "version": "1.0.2",
     "restore": {
       "projectUniqueName": "C:\\Users\\miste\\Desktop\\Bugs Bunny's Pocket\\Active production\\Confluent\\LiteConfig\\LiteConfig.csproj",
       "projectName": "LiteConfig",
