@@ -1,20 +1,24 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\miste\\Desktop\\Bugs Bunny's Pocket\\Active production\\Confluent\\LiteConfig\\LiteConfig.csproj": {}
+    "C:\\Users\\smerriam1\\Documents\\GitHub\\LiteConfig\\LiteConfig.csproj": {}
   },
   "projects": {
-    "C:\\Users\\miste\\Desktop\\Bugs Bunny's Pocket\\Active production\\Confluent\\LiteConfig\\LiteConfig.csproj": {
+    "C:\\Users\\smerriam1\\Documents\\GitHub\\LiteConfig\\LiteConfig.csproj": {
       "version": "1.0.2",
       "restore": {
-        "projectUniqueName": "C:\\Users\\miste\\Desktop\\Bugs Bunny's Pocket\\Active production\\Confluent\\LiteConfig\\LiteConfig.csproj",
+        "projectUniqueName": "C:\\Users\\smerriam1\\Documents\\GitHub\\LiteConfig\\LiteConfig.csproj",
         "projectName": "LiteConfig",
-        "projectPath": "C:\\Users\\miste\\Desktop\\Bugs Bunny's Pocket\\Active production\\Confluent\\LiteConfig\\LiteConfig.csproj",
-        "packagesPath": "C:\\Users\\miste\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\miste\\Desktop\\Bugs Bunny's Pocket\\Active production\\Confluent\\LiteConfig\\obj\\",
+        "projectPath": "C:\\Users\\smerriam1\\Documents\\GitHub\\LiteConfig\\LiteConfig.csproj",
+        "packagesPath": "C:\\Users\\smerriam1\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\smerriam1\\Documents\\GitHub\\LiteConfig\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "C:\\Users\\miste\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\smerriam1\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -22,6 +26,7 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -58,7 +63,7 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.401\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.307\\RuntimeIdentifierGraph.json"
         }
       }
     }

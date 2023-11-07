@@ -1,11 +1,11 @@
 {
   "version": 2,
-  "dgSpecHash": "tfnuMwukIfgvHy6URx11lfIeHiH7aiMOJeDQmySkAYApYSP1Vla3a3VhUPghdxFJAXMMyhyHeZE1+qraT8/z8w==",
+  "dgSpecHash": "o9UdnloVhL+xWwqLY7BlATGCwjVG1MPw5p2s+GcdY+egHTs0oSQPoJNPxgWXnBrJ+UDccHerE88sweikRJH9ew==",
   "success": true,
-  "projectFilePath": "C:\\Users\\miste\\Desktop\\Bugs Bunny's Pocket\\Active production\\Confluent\\LiteConfig\\LiteConfig.csproj",
+  "projectFilePath": "C:\\Users\\smerriam1\\Documents\\GitHub\\LiteConfig\\LiteConfig.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\miste\\.nuget\\packages\\microsoft.netcore.platforms\\1.1.0\\microsoft.netcore.platforms.1.1.0.nupkg.sha512",
-    "C:\\Users\\miste\\.nuget\\packages\\netstandard.library\\2.0.3\\netstandard.library.2.0.3.nupkg.sha512"
+    "C:\\Users\\smerriam1\\.nuget\\packages\\microsoft.netcore.platforms\\1.1.0\\microsoft.netcore.platforms.1.1.0.nupkg.sha512",
+    "C:\\Users\\smerriam1\\.nuget\\packages\\netstandard.library\\2.0.3\\netstandard.library.2.0.3.nupkg.sha512"
   ],
   "logs": []
 }

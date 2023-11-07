@@ -209,7 +209,7 @@ namespace LiteConfig
                     // Ignore whitespace and comments
                     if (string.IsNullOrWhiteSpace(lineToParse) || lineToParse.StartsWith("#")) return;
 
-                    // DEPRECATED: This is legacy code from when lists were treated as multiline items, no lists are one line comma-separated
+                    // DEPRECATED: This is legacy code from when lists were treated as multiline items, now lists are one line comma-separated
                     if (isList)
                     {
                         if (lineToParse.Trim().StartsWith("-"))
@@ -272,6 +272,8 @@ namespace LiteConfig
         /// <param name="filePath">The path to the file where the data will be written</param>
         private void WriteToFile(string filePath)
         {
+            if (!File.Exists(filePath)) File.Create(filePath);
+
             // Ensure that the StreamWriter is disposed of properly
             using (StreamWriter sw = new StreamWriter(filePath))
             {
