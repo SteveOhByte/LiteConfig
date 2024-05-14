@@ -2,13 +2,13 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
   <metadata>
     <id>LiteConfig</id>
-    <version>1.0.2</version>
+    <version>1.0.3</version>
     <title>LiteConfig</title>
-    <authors>SteveOh</authors>
+    <authors>SteveOhByte</authors>
     <licenseUrl>https://www.gnu.org/licenses/gpl-3.0.en.html#license-text</licenseUrl>
     <icon>icon.png</icon>
     <description>A simple lightweight configuration format</description>
-    <repository url="https://github.com/SteveOhIo/LiteConfig" />
+    <repository url="https://github.com/SteveOhByte/LiteConfig" />
     <dependencies>
       <group targetFramework=".NETStandard2.0" />
     </dependencies>

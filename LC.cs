@@ -25,11 +25,11 @@
  *     GPL License: https://www.gnu.org/licenses/gpl-3.0.en.html#license-text
  *
  * Repository:
- *     GitHub: https://github.com/SteveOhIo/LiteConfig
+ *     GitHub: https://github.com/SteveOhByte/LiteConfig
  * 
- * Author: SteveOh
- * Date: 21/10/2023
- * Version: 1.0.2
+ * Author: SteveOhByte
+ * Date: 08/05/2024
+ * Version: 1.0.3
  *
  */
 
@@ -52,12 +52,16 @@ namespace LiteConfig
     {
         [SuppressMessage("ReSharper", "MemberCanBePrivate.Global")]
         public Dictionary<string, object> Data { get; set; } = new Dictionary<string, object>();
+        private static readonly object fileLock = new object();  // Lock for synchronizing access
 
         private static LC LoadFile(string filePath)
         {
-            LC lc = new LC();
-            lc.LoadFromFile(filePath);
-            return lc;
+            lock (fileLock)
+            {
+                LC lc = new LC();
+                lc.LoadFromFile(filePath);
+                return lc;
+            }
         }
 
         #region Read/Write Methods
@@ -85,7 +89,44 @@ namespace LiteConfig
                     $"Invalid data type for key \"{key}\". Attempted to convert \"{lc.Data[key]}\" to type \"{typeof(T)}\"");
             }
         }
+        
+        /// <summary>
+        /// Writes a blank line to the specified file
+        /// </summary>
+        /// <param name="filePath">The path to the LC file</param>
+        public static void WriteBlankLine(string filePath)
+        {
+            lock (fileLock)
+            {
+                if (!File.Exists(filePath))
+                    File.Create(filePath).Close();
 
+                List<string> lines = File.ReadAllLines(filePath).ToList();
+                lines.Add(string.Empty); // Add a blank line
+
+                File.WriteAllLines(filePath, lines);
+            }
+        }
+        
+        /// <summary>
+        /// Writes a comment to the specified LC file
+        /// </summary>
+        /// <param name="filePath">The path to the LC file</param>
+        /// <param name="comment">The comment to write</param>
+        public static void WriteComment(string filePath, string comment)
+        {
+            lock (fileLock)
+            {
+                if (!File.Exists(filePath))
+                    File.Create(filePath).Close();
+
+                List<string> lines = File.ReadAllLines(filePath).ToList();
+                lines.Add($"# {comment}"); // Add the comment
+
+                File.WriteAllLines(filePath, lines);
+            }
+        }
+        
         /// <summary>
         /// Writes a value with a specified key to a specified LC file
         /// </summary>
@@ -95,9 +136,15 @@ namespace LiteConfig
         /// <typeparam name="T">The type of the value to write</typeparam>
         public static void WriteValue<T>(string filePath, string key, T value)
         {
-            LC lc = LoadFile(filePath);
-            lc.Data[key] = value.ToString();
-            lc.WriteToFile(filePath);
+            lock (fileLock)
+            {
+                if (!File.Exists(filePath))
+                    File.Create(filePath).Close();
+
+                LC lc = LoadFile(filePath);
+                lc.Data[key] = value.ToString();
+                lc.WriteToFile(filePath);
+            }
         }
 
         // Shortcut methods for reading values of a specific type
@@ -173,7 +220,6 @@ namespace LiteConfig
         /// <exception cref="FileNotFoundException">Thrown when the file does not exist</exception>
         public void LoadFromFile(string filePath)
         {
-            // Verify file validity
             if (filePath == null) throw new InvalidDataException("File path cannot be null");
             if (!filePath.EndsWith(".lc"))
                 throw new InvalidDataException("File \"" + filePath + "\" is not a valid LC file");
@@ -182,7 +228,6 @@ namespace LiteConfig
                 throw new FileNotFoundException("File \"" + filePath + "\" not found");
             }
 
-            // Ensure that the StreamReader is disposed of properly
             using (StreamReader sr = new StreamReader(filePath))
             {
                 string line;
@@ -192,7 +237,6 @@ namespace LiteConfig
                 bool isList = false;
                 List<string> currentList = new List<string>();
 
-                // Reading each line until the end
                 while ((line = sr.ReadLine()) != null)
                 {
                     ParseLine(line);
@@ -203,13 +247,10 @@ namespace LiteConfig
                     Data[currentKey] = currentList;
                 }
 
-                // Parses a line of text
                 void ParseLine(string lineToParse)
                 {
-                    // Ignore whitespace and comments
                     if (string.IsNullOrWhiteSpace(lineToParse) || lineToParse.StartsWith("#")) return;
 
-                    // DEPRECATED: This is legacy code from when lists were treated as multiline items, now lists are one line comma-separated
                     if (isList)
                     {
                         if (lineToParse.Trim().StartsWith("-"))
@@ -221,12 +262,11 @@ namespace LiteConfig
                             Data[currentKey] = currentList;
                             currentList = new List<string>();
                             isList = false;
-                            ParseLine(lineToParse); // Parse the line again
+                            ParseLine(lineToParse);
                         }
                     }
                     else if (!isMultiLine)
                     {
-                        // If the line is missing a colon, throw an exception
                         int colonIndex = lineToParse.IndexOf(":", StringComparison.Ordinal);
                         if (colonIndex == -1)
                             throw new InvalidDataException("Invalid line format on line \"" + lineToParse + "\'");
@@ -234,7 +274,6 @@ namespace LiteConfig
                         currentKey = lineToParse.Substring(0, colonIndex).Trim();
                         currentValue = lineToParse.Substring(colonIndex + 1).Trim();
 
-                        // Multi/single line check
                         if (currentValue.StartsWith("\""))
                         {
                             isMultiLine = true;
@@ -272,23 +311,34 @@ namespace LiteConfig
         /// <param name="filePath">The path to the file where the data will be written</param>
         private void WriteToFile(string filePath)
         {
-            if (!File.Exists(filePath)) File.Create(filePath);
+            // Read the existing lines to preserve them
+            List<string> existingLines = new List<string>();
+
+            if (File.Exists(filePath))
+            {
+                existingLines = File.ReadAllLines(filePath).ToList();
+            }
 
             // Ensure that the StreamWriter is disposed of properly
-            using (StreamWriter sw = new StreamWriter(filePath))
+            using (StreamWriter sw = new StreamWriter(filePath, false))
             {
-                foreach (KeyValuePair<string, object> kvp in Data) // Iterate through each key-value pair
+                foreach (string line in existingLines)
+                {
+                    sw.WriteLine(line);
+                }
+
+                foreach (KeyValuePair<string, object> kvp in from kvp in Data let keyExists = existingLines
+                             .Any(line => line.StartsWith($"{kvp.Key}:")) where !keyExists select kvp)
                 {
                     switch (kvp.Value)
                     {
-                        // If the value is a string and contains a newline, wrap it in quotes
                         case string stringValue when stringValue.Contains("\n"):
                             sw.WriteLine($"{kvp.Key}: \"{stringValue}\"");
                             break;
-                        case string stringValue: // If the value is a string, write it as-is
+                        case string stringValue:
                             sw.WriteLine($"{kvp.Key}: {stringValue}");
                             break;
-                        case List<string> listValue: // If the value is a list, write the items comma-separated
+                        case List<string> listValue:
                             sw.WriteLine($"{kvp.Key}: {string.Join(", ", listValue)}");
                             break;
                     }
